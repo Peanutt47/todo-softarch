@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center text-success mb-4">Todo List</h2>
+    {% if user.is_authenticated %}
+        <p class="text-center">Welcome, <strong>{{ user.username }}</strong>!</p>
+        <div class="text-center mb-4">
+            <a href="{% url 'add_todo' %}" class="btn btn-success">+ Add Todo</a>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- To Do Column -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h5>To Do</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted text-center">This item hasn't been started</p>
+                    <ul class="list-group">
+                        {% for todo in todos %}
+                            {% if todo.status == 'To Do' %}
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-center align-items-center mb-2">
+                                        {% if todo.photo %}
+                                            <img src="{{ todo.photo.url }}" alt="Todo Photo" class="rounded" height="210" width="320">
+                                        {% endif %}
+                                    </div>
+                                    <strong>{{ todo.title }}</strong>
+                                    <p class="text-muted">{{ todo.description }}</p>
+                                    {% if user.is_authenticated %}
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <form method="POST" action="{% url 'update_todo' todo.id %}">
+                                            {% csrf_token %}
+                                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                                <option value="To Do" {% if todo.status == 'To Do' %}selected{% endif %}>To Do</option>
+                                                <option value="In Progress" {% if todo.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                                <option value="Done" {% if todo.status == 'Done' %}selected{% endif %}>Done</option>
+                                            </select>
+                                        </form>
+                                        <div>
+                                            <a href="{% url 'update_todo' todo.id %}" class="btn btn-info btn-sm">Edit</a>
+                                            <form method="POST" action="{% url 'delete_todo' todo.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progress Column -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-white text-center">
+                    <h5>In Progress</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted text-center">This is actively being worked on</p>
+                    <ul class="list-group">
+                        {% for todo in todos %}
+                            {% if todo.status == 'In Progress' %}
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-center align-items-center mb-2">
+                                        {% if todo.photo %}
+                                            <img src="{{ todo.photo.url }}" alt="Todo Photo" class="rounded" height="210" width="320">
+                                        {% endif %}
+                                    </div>
+                                    <strong>{{ todo.title }}</strong>
+                                    <p class="text-muted">{{ todo.description }}</p>
+                                    {% if user.is_authenticated %}
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <form method="POST" action="{% url 'update_todo' todo.id %}">
+                                            {% csrf_token %}
+                                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                                <option value="To Do" {% if todo.status == 'To Do' %}selected{% endif %}>To Do</option>
+                                                <option value="In Progress" {% if todo.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                                <option value="Done" {% if todo.status == 'Done' %}selected{% endif %}>Done</option>
+                                            </select>
+                                        </form>
+                                        <div>
+                                            <a href="{% url 'update_todo' todo.id %}" class="btn btn-info btn-sm">Edit</a>
+                                            <form method="POST" action="{% url 'delete_todo' todo.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Done Column -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white text-center">
+                    <h5>Done</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted text-center">This has been completed</p>
+                    <ul class="list-group">
+                        {% for todo in todos %}
+                            {% if todo.status == 'Done' %}
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-center align-items-center mb-2">
+                                        {% if todo.photo %}
+                                            <img src="{{ todo.photo.url }}" alt="Todo Photo" class="rounded" height="210" width="320">
+                                        {% endif %}
+                                    </div>
+                                    <strong>{{ todo.title }}</strong>
+                                    <p class="text-muted">{{ todo.description }}</p>
+                                    {% if user.is_authenticated %}
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <form method="POST" action="{% url 'update_todo' todo.id %}">
+                                            {% csrf_token %}
+                                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                                <option value="To Do" {% if todo.status == 'To Do' %}selected{% endif %}>To Do</option>
+                                                <option value="In Progress" {% if todo.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                                <option value="Done" {% if todo.status == 'Done' %}selected{% endif %}>Done</option>
+                                            </select>
+                                        </form>
+                                        <div>
+                                            <a href="{% url 'update_todo' todo.id %}" class="btn btn-info btn-sm">Edit</a>
+                                            <form method="POST" action="{% url 'delete_todo' todo.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
