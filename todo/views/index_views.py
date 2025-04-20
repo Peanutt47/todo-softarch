@@ -10,5 +10,9 @@ class Index(View):
         """
         Handle GET requests.
         """
-        todos = Todo.objects.all()
+        user = request.user
+        if user.is_authenticated:
+            todos = Todo.objects.filter(user=request.user)
+        else:
+            return redirect('login')
         return render(request, 'todo_list.html', {'todos': todos})
