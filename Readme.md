@@ -94,6 +94,7 @@ The source code for this project is available on GitHub:
     CLOUDINARY_API_KEY=your_cloudinary_api_key
     CLOUDINARY_API_SECRET=your_cloudinary_api_secret
    ```
+   (I already provided the .env in google classroom.)
    
 5. **Run Migrations**:
    ```bash
